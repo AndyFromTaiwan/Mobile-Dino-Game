@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
     private TextView scoreLabel;
     private int scoreTime = 0;
-    private Timer mTimer;
+    private Timer mTimer = null;
 
 
     Rect rectObstacle = new Rect();
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
     boolean isBaroReady = false;
     boolean isAccReady = false;
 
-    boolean isJumping;
+    boolean isJumping = false;
     boolean isPrepareJump = false;
-    boolean isDucking;
+    boolean isDucking = false;
 
     boolean isGameOver = false;
 
@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Tony Timer
         scoreLabel = (TextView) findViewById(R.id.scoreLabel);
-        mTimer = new Timer();
 
-
-
+        // 1021 1825
+        // move to onStart
+        //mTimer = new Timer();
 
     }
 
@@ -203,8 +203,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        // 1021 1825
+        mTimer = new Timer();
+
         Log.i(TAG, "On Start .....");
-        //TODO Andy 1021 Bugs in replay
         scoreTime = 0;
         isGameOver = false;
 
@@ -224,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 scoreLabel.setText("Score : " + scoreTime);
             }
-        }, 0, 20);
+        }, 0, 1000);
     }
 
     /*
@@ -244,7 +247,8 @@ public class MainActivity extends AppCompatActivity {
         dinoAnimation.start();
         groundSprite.startAnimation(groundSlide);
         ValueAnimator obstacleAnimation = ValueAnimator.ofFloat(1200, -300);
-        obstacleAnimation.setDuration(2600);
+        //original 2600
+        obstacleAnimation.setDuration(3000);
         obstacleAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -279,6 +283,12 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Game Over!");
         System.out.println("Your score: "+scoreTime);
 
+        // 1021 1830
+        // Tony reset when game over
+        mTimer.cancel();
+        mTimer = null;
+
+
         // Explicit Intents
         //Intent intent = new Intent(this, GameOverActivity.class);
         //intent.putExtra(MESSAGE, String.valueOf(scoreTime));
@@ -287,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction("GameOverScoringActivity");
         intent.putExtra(MESSAGE, String.valueOf(scoreTime));
         startActivity(intent);
+
+
 
     }
 
@@ -354,10 +366,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sprite2rect(Rect rectangle, ImageView animation) {
-        rectangle.left = (int) animation.getX();
-        rectangle.top = (int) animation.getY();
-        rectangle.bottom = (int) (animation.getY() + animation.getWidth());
-        rectangle.right = (int) (animation.getX() + animation.getWidth());
+        rectangle.left = (int) animation.getX() + 10;
+        rectangle.top = (int) animation.getY() + 10;
+        // 1021 20:45 + animation.getHeight()
+        rectangle.bottom = (int) (animation.getY() + animation.getHeight());
+        rectangle.right = (int) (animation.getX() + animation.getWidth() - 10);
     }
 
     private void randomObstacle() {
@@ -401,6 +414,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void dinoDuck(){
         isDucking = true;
+        isJumping = false;
         dinoDuckingAnimation.start();
         dinoDuckingSprite.setVisibility(View.VISIBLE);
         dinoAnimation.stop();

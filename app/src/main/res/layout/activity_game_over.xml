@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameOverActivity"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:gravity="center">
 
 
 
@@ -16,8 +16,17 @@
     <ImageView
         android:layout_width="350dp"
         android:layout_height="151dp"
-        android:layout_marginBottom="280dp"
+        android:layout_marginBottom="30dp"
         android:src="@drawable/game_over" />
+
+    <TextView
+        android:id="@+id/highestScoreLabel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="-10dp"
+        android:gravity="center"
+        android:text="999"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/user_score"
@@ -25,24 +34,39 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:text="150"
-        android:layout_marginTop="-270dp"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/highestScoreLabel"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="999"
-        android:layout_marginTop="50dp"
-        android:textSize="30sp" />
+        android:text="Enter Your Name Below" />
 
-    <Button
+    // user input name
+    <EditText
+        android:id="@+id/nameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Play Again"
-        android:textAllCaps="false"/>
+        android:ems="10"
+        android:hint="Name (Tom)"
+        android:gravity="center"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Score" />
+
+    <Button
+        android:id="@+id/playAgainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAY AGAIN"
+        android:textAllCaps="false"
+        android:onClick="playAgain"/>
+
 
 
 </LinearLayout>
