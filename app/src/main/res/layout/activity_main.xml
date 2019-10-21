@@ -21,33 +21,33 @@
 
     <Button
         android:id="@+id/newGameButton"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="156dp"
         android:layout_marginTop="69dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="29dp"
+        android:onClick="newGame"
         android:text="NEW GAME"
         app:layout_constraintBottom_toTopOf="@+id/viewScoreButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        android:onClick="newGame"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/viewScoreButton"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="127dp"
         android:layout_marginTop="29dp"
         android:layout_marginEnd="127dp"
         android:layout_marginBottom="174dp"
+        android:onClick="viewScore"
         android:text="VIEW LEADERBOARD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newGameButton"
-        android:onClick="viewScore"/>
+        app:layout_constraintTop_toBottomOf="@+id/newGameButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
