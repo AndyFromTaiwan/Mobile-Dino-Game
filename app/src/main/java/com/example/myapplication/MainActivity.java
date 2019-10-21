@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
     private TextView scoreLabel;
     private int scoreTime = 0;
-    private Timer mTimer;
+    private Timer mTimer = null;
 
 
     Rect rectObstacle = new Rect();
@@ -107,7 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Tony Timer
         scoreLabel = (TextView) findViewById(R.id.scoreLabel);
-        mTimer = new Timer();
+
+        // 1021 1825
+        // move to onStart
+        //mTimer = new Timer();
 
 
 
@@ -203,8 +206,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        // 1021 1825
+        mTimer = new Timer();
+
         Log.i(TAG, "On Start .....");
-        //TODO Andy 1021 Bugs in replay
         scoreTime = 0;
         isGameOver = false;
 
@@ -279,6 +285,12 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Game Over!");
         System.out.println("Your score: "+scoreTime);
 
+        // 1021 1830
+        // Tony reset when game over
+        mTimer.cancel();
+        mTimer = null;
+
+
         // Explicit Intents
         //Intent intent = new Intent(this, GameOverActivity.class);
         //intent.putExtra(MESSAGE, String.valueOf(scoreTime));
@@ -287,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction("GameOverScoringActivity");
         intent.putExtra(MESSAGE, String.valueOf(scoreTime));
         startActivity(intent);
+
+
 
     }
 
