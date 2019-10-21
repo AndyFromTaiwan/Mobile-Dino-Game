@@ -31,6 +31,9 @@ public class GameOverActivity extends AppCompatActivity {
     // Tony play again
     Button playAgainButton;
 
+    // Tony return menu
+    Button returnMenuButton;
+
 
     // Tony highest score
     private TextView highestScoreLabel;
@@ -47,7 +50,7 @@ public class GameOverActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        score.setText("Your Score: " + intent.getStringExtra(MainActivity.MESSAGE));
+        score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
 
 
         // 1021 1740
@@ -69,6 +72,9 @@ public class GameOverActivity extends AppCompatActivity {
         // Tony play again
         playAgainButton = (Button) findViewById(R.id.playAgainButton);
 
+        // Tony return menu
+        returnMenuButton = (Button) findViewById(R.id.returnMenuButton);
+
     }
 
     // testing function for storing user input name
@@ -79,6 +85,13 @@ public class GameOverActivity extends AppCompatActivity {
     // 1021 1740
     // Tony replay function
     public void playAgain(View view) {
+        startActivity(new Intent(getApplicationContext(), PlayGameActivity.class));
+    }
+
+
+    // 1021 2320
+    // Tony return menu function
+    public void returnMenu(View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
