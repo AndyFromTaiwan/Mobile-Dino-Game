@@ -365,9 +365,9 @@ public class MainActivity extends AppCompatActivity {
         //Generate random number between 1 and 5
         //int randomNumber = random.nextInt(5 - 1 + 1) + 1;
         // Andy 1021, adds ptero1 as obstacle0_animation
-        //int randomNumber = random.nextInt(6);
+        int randomNumber = random.nextInt(6);
         // Andy 1021, for testing
-        int randomNumber = 0;
+        //int randomNumber = 0;
         //System.out.println(randomNumber);
         switch (randomNumber) {
             case 1:
