@@ -254,8 +254,11 @@ public class PlayGameActivity extends AppCompatActivity {
             public void onAnimationUpdate(ValueAnimator animation) {
                 obstacle.setX((Float) animation.getAnimatedValue());
                 sprite2rect(rectObstacle, obstacle);
-                sprite2rect(rectDino, dinoSprite);
-
+                if(isDucking){
+                    sprite2rect(rectDuckDino,dinoDuckingSprite);
+                } else{
+                    sprite2rect(rectDino, dinoSprite);
+                }
                 if (!isGameOver && isCollisionDetected()){
                     gameOver();
                 }
@@ -420,10 +423,10 @@ public class PlayGameActivity extends AppCompatActivity {
         dinoAnimation.stop();
         dinoSprite.setVisibility(View.GONE);
         //Create Dino Ducking Rectangle
-        rectDuckDino.left = (int) dinoDuckingSprite.getX();
-        rectDuckDino.top = (int) dinoDuckingSprite.getY();
-        rectDuckDino.bottom = (int) (dinoDuckingSprite.getY() + dinoDuckingSprite.getWidth());
-        rectDuckDino.right = (int) (dinoDuckingSprite.getX() + dinoDuckingSprite.getWidth());
+        //rectDuckDino.left = (int) dinoDuckingSprite.getX();
+        //rectDuckDino.top = (int) dinoDuckingSprite.getY();
+        //rectDuckDino.bottom = (int) (dinoDuckingSprite.getY() + dinoDuckingSprite.getWidth());
+        //rectDuckDino.right = (int) (dinoDuckingSprite.getX() + dinoDuckingSprite.getWidth());
     }
 
     private void dinoUnduck(){
