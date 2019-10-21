@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -46,6 +47,9 @@ public class PlayGameActivity extends AppCompatActivity {
     private int scoreTime = 0;
     private Timer mTimer = null;
 
+
+    private ValueAnimator obstacleAnimation;
+    private AnimatorSet set;
 
     Rect rectObstacle = new Rect();
     Rect rectJumpDino = new Rect();
@@ -112,7 +116,9 @@ public class PlayGameActivity extends AppCompatActivity {
         // move to onStart
         //mTimer = new Timer();
 
+
     }
+
 
     private void sensorActivity() {
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -241,12 +247,32 @@ public class PlayGameActivity extends AppCompatActivity {
 
      */
 
+    private void animationInitial() {
+        //Animate Dino
+        dinoSprite = (ImageView) findViewById(R.id.dino_animation);
+        dinoSprite.setBackgroundResource(R.drawable.dino_animation);
+        dinoAnimation = (AnimationDrawable) dinoSprite.getBackground();
+        //Animate Dino Ducking
+        dinoDuckingSprite = (ImageView) findViewById(R.id.dino_ducking_animation);
+        dinoDuckingSprite.setBackgroundResource(R.drawable.dino_ducking_animation);
+        dinoDuckingAnimation = (AnimationDrawable) dinoDuckingSprite.getBackground();
+        dinoDuckingSprite.setVisibility(View.GONE);
+        // Animate Ground
+        groundSprite = (ImageView) findViewById(R.id.ground_animation);
+        groundSprite.setBackgroundResource(R.drawable.ground_animation);
+        groundAnimation = (AnimationDrawable) groundSprite.getBackground();
+        groundSlide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ground_slide);
 
+        dinoJumpSprite = (ImageView) findViewById(R.id.dino_jump_animation);
+        dinoJumpSprite.setBackgroundResource(R.drawable.dino);
+        dinoJumpSprite.setVisibility(View.GONE);
+    }
 
     public void showAnim() {
         dinoAnimation.start();
+
         groundSprite.startAnimation(groundSlide);
-        ValueAnimator obstacleAnimation = ValueAnimator.ofFloat(1200, -300);
+        obstacleAnimation = ValueAnimator.ofFloat(1200, -300);
         //original 2600
         obstacleAnimation.setDuration(3000);
         obstacleAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -285,6 +311,7 @@ public class PlayGameActivity extends AppCompatActivity {
         isGameOver = true;
         System.out.println("Game Over!");
         System.out.println("Your score: "+scoreTime);
+        animationStop();
 
         // 1021 1830
         // Tony reset when game over
@@ -303,6 +330,18 @@ public class PlayGameActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void animationStop() {
+
+        dinoAnimation.stop();
+        groundSprite.clearAnimation();
+        obstacleAnimation.pause();
+        if (isJumping) set.pause();
+        //dinoSprite = (ImageView) findViewById(R.id.dino_dead);
+        dinoSprite.setBackgroundResource(R.drawable.dead);
+        dinoDuckingSprite.setBackgroundResource(R.drawable.dead);
+        dinoJumpSprite.setBackgroundResource(R.drawable.dead);
     }
 
     private boolean isCollisionDetected() {
@@ -327,22 +366,7 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
 
-    private void animationInitial() {
-        //Animate Dino
-        dinoSprite = (ImageView) findViewById(R.id.dino_animation);
-        dinoSprite.setBackgroundResource(R.drawable.dino_animation);
-        dinoAnimation = (AnimationDrawable) dinoSprite.getBackground();
-        //Animate Dino Ducking
-        dinoDuckingSprite = (ImageView) findViewById(R.id.dino_ducking_animation);
-        dinoDuckingSprite.setBackgroundResource(R.drawable.dino_ducking_animation);
-        dinoDuckingAnimation = (AnimationDrawable) dinoDuckingSprite.getBackground();
-        dinoDuckingSprite.setVisibility(View.GONE);
-        // Animate Ground
-        groundSprite = (ImageView) findViewById(R.id.ground_animation);
-        groundSprite.setBackgroundResource(R.drawable.ground_animation);
-        groundAnimation = (AnimationDrawable) groundSprite.getBackground();
-        groundSlide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ground_slide);
-    }
+
 
     private void buttons() {
         Button jumpButton = (Button) findViewById(R.id.button);
@@ -422,11 +446,6 @@ public class PlayGameActivity extends AppCompatActivity {
         dinoDuckingSprite.setVisibility(View.VISIBLE);
         dinoAnimation.stop();
         dinoSprite.setVisibility(View.GONE);
-        //Create Dino Ducking Rectangle
-        //rectDuckDino.left = (int) dinoDuckingSprite.getX();
-        //rectDuckDino.top = (int) dinoDuckingSprite.getY();
-        //rectDuckDino.bottom = (int) (dinoDuckingSprite.getY() + dinoDuckingSprite.getWidth());
-        //rectDuckDino.right = (int) (dinoDuckingSprite.getX() + dinoDuckingSprite.getWidth());
     }
 
     private void dinoUnduck(){
@@ -443,48 +462,52 @@ public class PlayGameActivity extends AppCompatActivity {
             dinoUnduck();
         }
 
-        dinoJumpSprite = (ImageView) findViewById(R.id.dino_jump_animation);
-        dinoJumpSprite.setBackgroundResource(R.drawable.dino_jump_animation);
-        float y = dinoSprite.getY();
-        ValueAnimator jumpUpAnimation = ValueAnimator.ofFloat(y, y-350);
-        jumpUpAnimation.setDuration(350);
-        jumpUpAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                dinoJumpSprite.setY((Float) animation.getAnimatedValue());
-                sprite2rect(rectJumpDino, dinoJumpSprite);
-            }
-        });
-        ValueAnimator jumpDownAnimation = ValueAnimator.ofFloat(y-350, y);
-        jumpDownAnimation.setDuration(350);
-        jumpDownAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                dinoJumpSprite.setY((Float) animation.getAnimatedValue());
-                sprite2rect(rectJumpDino, dinoJumpSprite);
-            }
-        });
-        jumpUpAnimation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                isJumping = true;
-                isDucking = false;
-                dinoSprite.setVisibility(View.GONE);
-                dinoDuckingSprite.setVisibility(View.GONE);
-                dinoJumpSprite.setVisibility(View.VISIBLE);
-            }
-        });
-        jumpDownAnimation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isJumping = false;
-                dinoSprite.setVisibility(View.VISIBLE);
-                dinoJumpSprite.setVisibility(View.GONE);
-            }
-        });
-        AnimatorSet set = new AnimatorSet();
-        set.playSequentially(jumpUpAnimation, jumpDownAnimation);
-        set.start();
+        if(!isJumping){
+            float y = dinoSprite.getY();
+            ValueAnimator jumpUpAnimation = ValueAnimator.ofFloat(y, y-350);
+            jumpUpAnimation.setDuration(350);
+            jumpUpAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    dinoJumpSprite.setY((Float) animation.getAnimatedValue());
+                    sprite2rect(rectJumpDino, dinoJumpSprite);
+                }
+            });
+            ValueAnimator jumpDownAnimation = ValueAnimator.ofFloat(y-350, y);
+            jumpDownAnimation.setDuration(350);
+            jumpDownAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    dinoJumpSprite.setY((Float) animation.getAnimatedValue());
+                    sprite2rect(rectJumpDino, dinoJumpSprite);
+                }
+            });
+            jumpUpAnimation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isJumping = true;
+                    isDucking = false;
+                    dinoAnimation.stop();
+                    dinoSprite.setVisibility(View.GONE);
+                    dinoDuckingSprite.setVisibility(View.GONE);
+                    dinoJumpSprite.setVisibility(View.VISIBLE);
+                }
+            });
+            jumpDownAnimation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isJumping = false;
+                    dinoAnimation.start();
+                    dinoSprite.setVisibility(View.VISIBLE);
+                    dinoJumpSprite.setVisibility(View.GONE);
+                }
+            });
+            set = new AnimatorSet();
+            set.playSequentially(jumpUpAnimation, jumpDownAnimation);
+            set.start();
+
+        }
+
     }
 
     public void kalmanFilterAltitude(float accelerometer, float barometer) {
