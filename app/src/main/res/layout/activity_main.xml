@@ -4,249 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:gravity="center">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:layout_marginBottom="368dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/main_menu" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp">
+    <Button
+        android:id="@+id/newGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="158dp"
+        android:layout_marginBottom="29dp"
+        android:text="NEW GAME"
+        app:layout_constraintBottom_toTopOf="@+id/viewScoreButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:onClick="newGame"/>
 
-        // Tony Timer
-        <TextView
-            android:id="@+id/scoreLabel"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="0"
-            android:textSize = "18sp"
-            android:paddingLeft="250dp"
-            android:gravity="center_vertical"/>
-
-        <ImageView
-            android:id="@+id/ground_animation"
-            android:layout_width="1827dp"
-            android:layout_height="wrap_content"
-
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.514"
-            tools:layout_editor_absoluteX="25dp"></ImageView>
-
-        <ImageView
-            android:id="@+id/dino_animation"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
-            android:layout_marginBottom="300dp"
-            android:contentDescription="TODO"
-            android:gravity="center"
-
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="118"
-            tools:layout_conversion_wrapWidth="131"></ImageView>
-
-        <ImageView
-            android:id="@+id/dino_ducking_animation"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
-            android:layout_marginBottom="300dp"
-            android:contentDescription="TODO"
-            android:gravity="center"
-
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="118"
-            tools:layout_conversion_wrapWidth="131"></ImageView>
-
-        <ImageView
-            android:id="@+id/dino_jump_animation"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
-            android:layout_marginBottom="300dp"
-            android:contentDescription="TODO"
-            android:gravity="center"
-
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="118"
-            tools:layout_conversion_wrapWidth="131"></ImageView>
-
-
-        <ImageView
-            android:id="@+id/obstacle1_animation"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="300dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-        <ImageView
-            android:id="@+id/obstacle2_animation"
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="300dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-        <ImageView
-            android:id="@+id/obstacle3_animation"
-            android:layout_width="51dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="300dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-        <ImageView
-            android:id="@+id/obstacle4_animation"
-            android:layout_width="49dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="300dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-        <ImageView
-            android:id="@+id/obstacle5_animation"
-            android:layout_width="34dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="300dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-        // Tony bird
-        <ImageView
-            android:id="@+id/obstacle0_animation"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="370dp"
-
-            android:layout_marginTop="300dp"
-
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="385dp"
-
-
-            android:contentDescription="TODO"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_conversion_wrapHeight="126"
-            tools:layout_conversion_wrapWidth="66"></ImageView>
-
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="104dp"
-            android:layout_marginBottom="528dp"
-            android:text="Jump"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/duckbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="192dp"
-            android:layout_marginBottom="528dp"
-            android:text="Duck"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/unduckbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="280dp"
-            android:layout_marginBottom="528dp"
-            android:text="Unduck"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <Button
+        android:id="@+id/viewScoreButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="127dp"
+        android:layout_marginBottom="174dp"
+        android:text="VIEW LEADERBOARD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newGameButton"
+        android:onClick="viewScore"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
