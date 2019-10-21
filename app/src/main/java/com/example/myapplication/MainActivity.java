@@ -32,10 +32,15 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.Intent;
+
 public class MainActivity extends AppCompatActivity {
 
 
-    // Tony Timer
+    // Andy 1021 Score Intent
+    public static String MESSAGE = "Score";
+
+    // Tony 1021 Timer
     private final static String TAG = "MainActivity";
     private TextView scoreLabel;
     private int scoreTime = 0;
@@ -83,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.i(TAG, "On Create .....");
+
+
         //Debug buttons (Jump, Duck, Unduck)
         buttons();
         //Kalman Filter Initialization
@@ -99,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         // Tony Timer
         scoreLabel = (TextView) findViewById(R.id.scoreLabel);
         mTimer = new Timer();
+
+
+
+
     }
 
     private void sensorActivity() {
@@ -191,6 +204,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "On Start .....");
+        //TODO Andy 1021 Bugs in replay
+        scoreTime = 0;
+        isGameOver = false;
+
 
         // start timer task
         setTimerTask();
@@ -235,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
                 sprite2rect(rectObstacle, obstacle);
                 sprite2rect(rectDino, dinoSprite);
 
-                if (isCollisionDetected()){
+                if (!isGameOver && isCollisionDetected()){
                     gameOver();
                 }
 
@@ -261,6 +278,16 @@ public class MainActivity extends AppCompatActivity {
         isGameOver = true;
         System.out.println("Game Over!");
         System.out.println("Your score: "+scoreTime);
+
+        // Explicit Intents
+        //Intent intent = new Intent(this, GameOverActivity.class);
+        //intent.putExtra(MESSAGE, String.valueOf(scoreTime));
+        // Implicit Intents
+        Intent intent = new Intent();
+        intent.setAction("GameOverScoringActivity");
+        intent.putExtra(MESSAGE, String.valueOf(scoreTime));
+        startActivity(intent);
+
     }
 
     private boolean isCollisionDetected() {
@@ -338,9 +365,9 @@ public class MainActivity extends AppCompatActivity {
         //Generate random number between 1 and 5
         //int randomNumber = random.nextInt(5 - 1 + 1) + 1;
         // Andy 1021, adds ptero1 as obstacle0_animation
-        int randomNumber = random.nextInt(6);
+        //int randomNumber = random.nextInt(6);
         // Andy 1021, for testing
-        //int randomNumber = 0;
+        int randomNumber = 0;
         //System.out.println(randomNumber);
         switch (randomNumber) {
             case 1:
