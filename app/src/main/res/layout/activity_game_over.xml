@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameOverActivity"
+    android:orientation="vertical">
+
+
+
+
+    // game over image
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="151dp"
+        android:layout_marginBottom="280dp"
+        android:src="@drawable/game_over" />
+
+    <TextView
+        android:id="@+id/user_score"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="150"
+        android:layout_marginTop="-270dp"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/highestScoreLabel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="999"
+        android:layout_marginTop="50dp"
+        android:textSize="30sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Play Again"
+        android:textAllCaps="false"/>
+
+
+</LinearLayout>
