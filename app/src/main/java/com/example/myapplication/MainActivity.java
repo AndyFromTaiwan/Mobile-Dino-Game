@@ -14,6 +14,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,7 +26,21 @@ import org.apache.commons.math3.linear.RealVector;
 
 import java.util.Random;
 
+// Tony Timer
+import android.util.Log;
+import android.widget.TextView;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity {
+
+
+    // Tony Timer
+    private final static String TAG = "MainActivity";
+    private TextView scoreLabel;
+    private int scoreTime = 0;
+    private Timer mTimer;
+
 
     Rect rectObstacle = new Rect();
     Rect rectJumpDino = new Rect();
@@ -60,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     boolean isPrepareJump = false;
     boolean isDucking;
 
+    boolean isGameOver = false;
+
 
 
     @Override
@@ -78,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         showAnim();
         //Start Sensors
         sensorActivity();
+
+        // Tony Timer
+        scoreLabel = (TextView) findViewById(R.id.scoreLabel);
+        mTimer = new Timer();
     }
 
     private void sensorActivity() {
@@ -165,6 +186,43 @@ public class MainActivity extends AppCompatActivity {
         sensorManager.registerListener(sensorListener, sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    // Tony Timer
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "On Start .....");
+
+        // start timer task
+        setTimerTask();
+    }
+
+    // Tony Timer - scoring function
+    private void setTimerTask() {
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //Log.i(TAG, "Timer Run!");
+                if (!isGameOver) {
+                    scoreTime++;
+                }
+                scoreLabel.setText("Score : " + scoreTime);
+            }
+        }, 0, 20);
+    }
+
+    /*
+    // Tony 1021 Timer - stop timer
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // cancel timer
+        mTimer.cancel();
+    }
+
+     */
+
+
+
     public void showAnim() {
         dinoAnimation.start();
         groundSprite.startAnimation(groundSlide);
@@ -196,10 +254,13 @@ public class MainActivity extends AppCompatActivity {
     private void gameOver() {
         //Game Over method
         //Stop all animation
-        // Add big Eye Dino at exact same last lacation
+        // Add big Eye Dino at exact same last location
         //Display game over
         //Display restart
         //Save high score
+        isGameOver = true;
+        System.out.println("Game Over!");
+        System.out.println("Your score: "+scoreTime);
     }
 
     private boolean isCollisionDetected() {
@@ -275,7 +336,11 @@ public class MainActivity extends AppCompatActivity {
     private void randomObstacle() {
         Random random = new Random();
         //Generate random number between 1 and 5
-        int randomNumber = random.nextInt(5 - 1 + 1) + 1;
+        //int randomNumber = random.nextInt(5 - 1 + 1) + 1;
+        // Andy 1021, adds ptero1 as obstacle0_animation
+        int randomNumber = random.nextInt(6);
+        // Andy 1021, for testing
+        //int randomNumber = 0;
         //System.out.println(randomNumber);
         switch (randomNumber) {
             case 1:
@@ -298,6 +363,12 @@ public class MainActivity extends AppCompatActivity {
                 obstacle = (ImageView) findViewById(R.id.obstacle5_animation);
                 obstacle.setBackgroundResource(R.drawable.obstacle5_animation);
                 break;
+            // Tony bird
+            default:
+                obstacle = (ImageView) findViewById(R.id.obstacle0_animation);
+                obstacle.setBackgroundResource(R.drawable.obstacle0_animation);
+                break;
+
         }
     }
 
@@ -323,6 +394,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dinoJump() {
+        //Andy 1021: fixes the bug
+            if(isDucking){
+                dinoUnduck();
+            }
+
             dinoJumpSprite = (ImageView) findViewById(R.id.dino_jump_animation);
             dinoJumpSprite.setBackgroundResource(R.drawable.dino_jump_animation);
             float y = dinoSprite.getY();
