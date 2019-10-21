@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
     boolean isBaroReady = false;
     boolean isAccReady = false;
 
-    boolean isJumping;
+    boolean isJumping = false;
     boolean isPrepareJump = false;
-    boolean isDucking;
+    boolean isDucking = false;
 
     boolean isGameOver = false;
 
@@ -111,9 +111,6 @@ public class MainActivity extends AppCompatActivity {
         // 1021 1825
         // move to onStart
         //mTimer = new Timer();
-
-
-
 
     }
 
@@ -230,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 scoreLabel.setText("Score : " + scoreTime);
             }
-        }, 0, 20);
+        }, 0, 1000);
     }
 
     /*
@@ -250,7 +247,8 @@ public class MainActivity extends AppCompatActivity {
         dinoAnimation.start();
         groundSprite.startAnimation(groundSlide);
         ValueAnimator obstacleAnimation = ValueAnimator.ofFloat(1200, -300);
-        obstacleAnimation.setDuration(2600);
+        //original 2600
+        obstacleAnimation.setDuration(3000);
         obstacleAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -368,10 +366,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sprite2rect(Rect rectangle, ImageView animation) {
-        rectangle.left = (int) animation.getX();
-        rectangle.top = (int) animation.getY();
-        rectangle.bottom = (int) (animation.getY() + animation.getWidth());
-        rectangle.right = (int) (animation.getX() + animation.getWidth());
+        rectangle.left = (int) animation.getX() + 10;
+        rectangle.top = (int) animation.getY() + 10;
+        // 1021 20:45 + animation.getHeight()
+        rectangle.bottom = (int) (animation.getY() + animation.getHeight());
+        rectangle.right = (int) (animation.getX() + animation.getWidth() - 10);
     }
 
     private void randomObstacle() {
@@ -415,6 +414,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void dinoDuck(){
         isDucking = true;
+        isJumping = false;
         dinoDuckingAnimation.start();
         dinoDuckingSprite.setVisibility(View.VISIBLE);
         dinoAnimation.stop();
