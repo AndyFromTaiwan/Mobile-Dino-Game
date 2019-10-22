@@ -6,26 +6,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    // Tony new game
-    Button newGameButton;
+    // 1022 score board image button
+    private ImageButton start = null;
+    private ImageButton board = null;
 
-    // Tony view leader board
-    Button viewScoreButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Tony new game
-        newGameButton = (Button) findViewById(R.id.newGameButton);
 
-        // Tony view leader board
-        viewScoreButton = (Button) findViewById(R.id.viewScoreButton);
+        // 1022 score board image button
+        start = (ImageButton) findViewById(R.id.start);
+        board = (ImageButton) findViewById(R.id.board);
 
 
     }
