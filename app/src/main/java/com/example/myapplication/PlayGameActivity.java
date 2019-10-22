@@ -231,7 +231,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 if (!isGameOver) {
                     scoreTime++;
                 }
-                scoreLabel.setText("Score : " + scoreTime);
+                scoreLabel.setText("SCORE : " + scoreTime);
             }
         }, 0, 1000);
     }
@@ -393,17 +393,17 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
     private void sprite2rect(Rect rectangle, ImageView animation) {
-        rectangle.left = (int) animation.getX() + 15;
-        rectangle.top = (int) animation.getY() + 10;
+        rectangle.left = (int) animation.getX() + 30;
+        rectangle.top = (int) animation.getY() + 30;
         // 1021 20:45 + animation.getHeight()
         rectangle.bottom = (int) (animation.getY() + animation.getHeight());
-        rectangle.right = (int) (animation.getX() + animation.getWidth() - 15);
+        rectangle.right = (int) (animation.getX() + animation.getWidth() - 30);
     }
 
     private void randomObstacle() {
         Random random = new Random();
         //Generate random number between 1 and 5
-        //int randomNumber = random.nextInt(5 - 1 + 1) + 1;
+        //int randomNumber = random.nextInt(5) + 1;
         // Andy 1021, adds ptero1 as obstacle0_animation
         int randomNumber = random.nextInt(6);
         // Andy 1021, for testing
