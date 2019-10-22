@@ -195,6 +195,7 @@
             tools:layout_conversion_wrapWidth="66"></ImageView>
 
         // Tony bird
+
         <ImageView
             android:id="@+id/obstacle0_animation"
             android:layout_width="50dp"
@@ -204,7 +205,7 @@
             android:layout_marginTop="300dp"
 
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="385dp"
+            android:layout_marginBottom="370dp"
 
 
             android:contentDescription="TODO"

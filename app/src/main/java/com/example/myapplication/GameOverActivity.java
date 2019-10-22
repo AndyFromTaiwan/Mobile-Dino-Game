@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.Intent;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -11,75 +12,136 @@ import butterknife.ButterKnife;
 // Tony
 import android.view.View;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class GameOverActivity extends AppCompatActivity {
 
     @BindView(R.id.user_score)
     TextView score;
 
-    // 1021 1740
-    // Tony user input name
-    String userName;
     EditText nameInput;
-    Button submitButton;
 
-    // Tony play again
-    Button playAgainButton;
+    private ImageButton playAgain = null;
+    private ImageButton mainMenu = null;
+    private ImageButton submit = null;
 
-    // Tony return menu
-    Button returnMenuButton;
-
-
-    // Tony highest score
     private TextView highestScoreLabel;
-    private int highestScore = 9999999;
+    //Andy
+    private String highestScore = "NO DATA";
+
+    FirebaseDatabase database;
+    DatabaseReference ranksRef;
+
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
 
+        playAgain = (ImageButton) findViewById(R.id.playAgain);
+        mainMenu = (ImageButton) findViewById(R.id.mainMenu);
+        submit = (ImageButton) findViewById(R.id.submit);
+
         highestScoreLabel = (TextView) findViewById(R.id.highestScoreLabel);
         highestScoreLabel.setText("Highest Score: " + highestScore);
 
-        ButterKnife.bind(this);
+        database = FirebaseDatabase.getInstance();
+        ranksRef = database.getReference("ranks");
 
+        ranksRef.orderByKey().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+        });
+
+        //Andy
+        for (int i=1; i<=5; i++) {
+            String index = String.valueOf(i);
+
+            //System.out.println("ranksRef.child"+index);
+            DatabaseReference player = ranksRef.child(index);
+            //System.out.println(player);
+            DatabaseReference playerName = player.child("name");
+            DatabaseReference playerScore = player.child("score");
+            //System.out.println(playerName);
+            //System.out.println(playerScore);
+
+            playerName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //System.out.println(snapshot);
+                    //System.out.println(snapshot.getValue());
+                    if (snapshot.getValue()!=null) {
+                        //System.out.println(index);
+                        //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
+                        //TODO add data and sorting
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+
+            playerScore.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    //System.out.println(snapshot);
+                    //System.out.println(snapshot.getValue());
+                    if (snapshot.getValue()!=null) {
+                        //TODO add data and sorting
+                        //System.out.println(index);
+                        //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
+                        switch(index) {
+                            case "1":
+                                highestScoreLabel.setText("Highest Score: " + snapshot.getValue().toString());
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
+
+        //Andy
+        userName = "";
+
+
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
 
-
-        // 1021 1740
-        // Tony store user input name
         nameInput = (EditText) findViewById(R.id.nameInput);
-        submitButton = (Button) findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userName = nameInput.getText().toString();
-
-                // testing user input name
-                showToast(userName);
-
-            }
-        });
-
-        // 1021 1740
-        // Tony play again
-        playAgainButton = (Button) findViewById(R.id.playAgainButton);
-
-        // Tony return menu
-        returnMenuButton = (Button) findViewById(R.id.returnMenuButton);
-
     }
 
     // testing function for storing user input name
-    private void showToast (String text) {
-        Toast.makeText(GameOverActivity.this, text, Toast.LENGTH_SHORT).show();
+    public void showToast (View view) {
+
+        userName = nameInput.getText().toString();
+        // testing user input name
+        // Andy
+        if (userName.length()>7) {
+            userName = userName.substring(0,7);
+        }
+
+        Toast.makeText(GameOverActivity.this, userName, Toast.LENGTH_SHORT).show();
     }
 
     // 1021 1740
@@ -88,14 +150,11 @@ public class GameOverActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), PlayGameActivity.class));
     }
 
-
     // 1021 2320
     // Tony return menu function
     public void returnMenu(View view) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
-
-
     // 1021 1740
     // Disable Return Button
     @Override
@@ -107,10 +166,6 @@ public class GameOverActivity extends AppCompatActivity {
                     return true;
             }
         }
-
         return super.dispatchKeyEvent(event);
     }
-
-
-
 }
