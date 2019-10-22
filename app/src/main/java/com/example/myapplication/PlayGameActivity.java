@@ -393,11 +393,11 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
     private void sprite2rect(Rect rectangle, ImageView animation) {
-        rectangle.left = (int) animation.getX() + 10;
+        rectangle.left = (int) animation.getX() + 15;
         rectangle.top = (int) animation.getY() + 10;
         // 1021 20:45 + animation.getHeight()
         rectangle.bottom = (int) (animation.getY() + animation.getHeight());
-        rectangle.right = (int) (animation.getX() + animation.getWidth() - 10);
+        rectangle.right = (int) (animation.getX() + animation.getWidth() - 15);
     }
 
     private void randomObstacle() {
