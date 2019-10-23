@@ -22,6 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
+
 public class GameOverActivity extends AppCompatActivity {
 
     @BindView(R.id.user_score)
@@ -39,8 +43,13 @@ public class GameOverActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference ranksRef;
+    String[] names;
+    Integer[] scores;
 
+    String userScore;
     String userName;
+
+    int rankPointer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,9 @@ public class GameOverActivity extends AppCompatActivity {
 
         highestScoreLabel = (TextView) findViewById(R.id.highestScoreLabel);
         highestScoreLabel.setText("Highest Score: " + highestScore);
+
+        names = new String[5];
+        scores = new Integer[5];
 
         database = FirebaseDatabase.getInstance();
         ranksRef = database.getReference("ranks");
@@ -90,7 +102,8 @@ public class GameOverActivity extends AppCompatActivity {
                     if (snapshot.getValue()!=null) {
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
-                        //TODO add data and sorting
+                        names[Integer.parseInt(index)-1] = snapshot.getValue().toString();
+
                     }
                 }
                 @Override
@@ -103,9 +116,9 @@ public class GameOverActivity extends AppCompatActivity {
                     //System.out.println(snapshot);
                     //System.out.println(snapshot.getValue());
                     if (snapshot.getValue()!=null) {
-                        //TODO add data and sorting
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
+                        scores[Integer.parseInt(index)-1] = Integer.valueOf(snapshot.getValue().toString());
                         switch(index) {
                             case "1":
                                 highestScoreLabel.setText("Highest Score: " + snapshot.getValue().toString());
@@ -126,7 +139,9 @@ public class GameOverActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
+        //score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
+        userScore = intent.getStringExtra(PlayGameActivity.MESSAGE);
+        score.setText("Your Score: " + userScore);
 
         nameInput = (EditText) findViewById(R.id.nameInput);
     }
@@ -142,6 +157,10 @@ public class GameOverActivity extends AppCompatActivity {
         }
 
         Toast.makeText(GameOverActivity.this, userName, Toast.LENGTH_SHORT).show();
+
+        if (userName!=null && userName.length()>0) {
+            submitScore();
+        }
     }
 
     // 1021 1740
@@ -168,4 +187,52 @@ public class GameOverActivity extends AppCompatActivity {
         }
         return super.dispatchKeyEvent(event);
     }
+
+    private String getValidRank() {
+        rankPointer++;
+        return String.valueOf(rankPointer);
+    }
+
+    private void submitScore() {
+        //TODO
+        rankPointer = 0;
+        HashMap<String,Integer> records = new HashMap<String,Integer>();
+        records.put(userName ,Integer.valueOf(userScore));
+        for(int i=0; i<5; i++) {
+
+            if(names[i]!=null && scores[i]!=null) {
+                if(records.containsKey(names[i])){
+                    Integer score = records.get(names[i]);
+                    if (scores[i]>score) {
+                        score = scores[i];
+                    }
+                    records.put(names[i], score);
+                }
+                else {
+                    records.put(names[i], scores[i]);
+                }
+
+            }
+        }
+        System.out.println(records);
+        final HashMap<String, Integer> sortedRecords = records.entrySet()
+                .stream()
+                .sorted((HashMap.Entry.<String, Integer>comparingByValue().reversed()))
+                .collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        //System.out.println(sortedRecords);
+
+
+        sortedRecords.forEach((k,v)->{
+            String i = getValidRank();
+            System.out.println("Rank: "+i + ", Name: "+k + ", Score: "+v);
+            DatabaseReference player = ranksRef.child(i);
+            DatabaseReference playerName = player.child("name");
+            DatabaseReference playerScore = player.child("score");
+            playerName.setValue(k);
+            playerScore.setValue(v.toString());
+
+
+        });
+    }
+
 }
