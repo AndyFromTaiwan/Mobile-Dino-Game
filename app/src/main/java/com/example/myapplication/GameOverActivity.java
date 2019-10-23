@@ -61,7 +61,7 @@ public class GameOverActivity extends AppCompatActivity {
         submit = (ImageButton) findViewById(R.id.submit);
 
         highestScoreLabel = (TextView) findViewById(R.id.highestScoreLabel);
-        highestScoreLabel.setText("Highest Score: " + highestScore);
+        highestScoreLabel.setText("HIGHTEST SCORE: " + highestScore);
 
         names = new String[5];
         scores = new Integer[5];
@@ -121,7 +121,7 @@ public class GameOverActivity extends AppCompatActivity {
                         scores[Integer.parseInt(index)-1] = Integer.valueOf(snapshot.getValue().toString());
                         switch(index) {
                             case "1":
-                                highestScoreLabel.setText("Highest Score: " + snapshot.getValue().toString());
+                                highestScoreLabel.setText("HIGHTEST SCORE: " + snapshot.getValue().toString());
                                 break;
                             default:
                                 break;
@@ -141,7 +141,7 @@ public class GameOverActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
         userScore = intent.getStringExtra(PlayGameActivity.MESSAGE);
-        score.setText("Your Score: " + userScore);
+        score.setText("YOUR SCORE: " + userScore);
 
         nameInput = (EditText) findViewById(R.id.nameInput);
     }
