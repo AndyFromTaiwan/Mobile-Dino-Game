@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -36,6 +37,9 @@ import java.util.TimerTask;
 import android.content.Intent;
 
 public class PlayGameActivity extends AppCompatActivity {
+
+    // Tony image button
+    private ImageButton unduck = null;
 
 
     // Andy 1021 Score Intent
@@ -369,6 +373,8 @@ public class PlayGameActivity extends AppCompatActivity {
 
 
     private void buttons() {
+
+        /*
         Button jumpButton = (Button) findViewById(R.id.button);
         jumpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,6 +391,33 @@ public class PlayGameActivity extends AppCompatActivity {
         });
         Button unduckButton = (Button) findViewById(R.id.unduckbutton);
         unduckButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dinoUnduck();
+            }
+        });*/
+
+
+        // Tony
+        // Tony
+        ImageButton jump = (ImageButton) findViewById(R.id.jump);
+        jump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dinoJump();
+            }
+        });
+
+        ImageButton duck = (ImageButton) findViewById(R.id.duck);
+        duck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dinoDuck();
+            }
+        });
+
+        ImageButton unduck = (ImageButton) findViewById(R.id.unduck);
+        unduck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dinoUnduck();

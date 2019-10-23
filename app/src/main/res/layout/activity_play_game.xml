@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_vertical"
-            android:paddingLeft="280dp"
+            android:paddingLeft="270dp"
             android:text="0"
-            android:textSize="18sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -234,38 +234,40 @@
             tools:layout_conversion_wrapWidth="66"></ImageView>
 
 
-        <Button
-            android:id="@+id/button"
+        <ImageButton
+            android:id="@+id/unduck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="104dp"
-            android:layout_marginBottom="520dp"
-            android:text="Jump"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="#00FFFFFF"
+            android:padding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/b_unduck" />
 
-        <Button
-            android:id="@+id/duckbutton"
+        <ImageButton
+            android:id="@+id/duck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="192dp"
-            android:layout_marginBottom="520dp"
-            android:text="Duck"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="20dp"
+            android:background="#00FFFFFF"
+            android:padding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/unduck"
+            app:srcCompat="@drawable/b_duck" />
 
-        <Button
-            android:id="@+id/unduckbutton"
+        <ImageButton
+            android:id="@+id/jump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="280dp"
-            android:layout_marginBottom="520dp"
-            android:text="Unduck"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="20dp"
+            android:background="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/duck"
+            app:srcCompat="@drawable/b_jump" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
