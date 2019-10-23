@@ -1,8 +1,8 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -12,15 +12,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 
 
 public class ViewScoreActivity extends AppCompatActivity {
 
 
-    // Tony 1022 store score board info
+    // stores and displays top 5 player score board info
+    // default values "NO DATA" if Firebase is unavailable
     private TextView scoreboardName1;
-    // extract first 7 char
     private String name1 = "NO";
     private TextView scoreboardScore1;
     private String score1 = "DATA";
@@ -33,21 +32,21 @@ public class ViewScoreActivity extends AppCompatActivity {
     private TextView scoreboardName3;
     private String name3 = "NO";
     private TextView scoreboardScore3;
-    private String score3= "DATA";
+    private String score3 = "DATA";
 
     private TextView scoreboardName4;
     private String name4 = "NO";
     private TextView scoreboardScore4;
-    private String score4= "DATA";
+    private String score4 = "DATA";
 
     private TextView scoreboardName5;
     private String name5 = "NO";
     private TextView scoreboardScore5;
     private String score5 = "DATA";
 
+    // Firebase
     FirebaseDatabase database;
     DatabaseReference ranksRef;
-
 
 
     @Override
@@ -55,8 +54,14 @@ public class ViewScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_score);
 
+        displayLeaderBoardTop5();
+        readFirebaseTop5();
+    }
 
-        // Tony 1022 show score board info
+
+    // shows score board info
+    private void displayLeaderBoardTop5() {
+
         scoreboardName1 = (TextView) findViewById(R.id.scoreboardName1);
         scoreboardName1.setText(name1);
         scoreboardScore1 = (TextView) findViewById(R.id.scoreboardScore1);
@@ -81,14 +86,13 @@ public class ViewScoreActivity extends AppCompatActivity {
         scoreboardName5.setText(name5);
         scoreboardScore5 = (TextView) findViewById(R.id.scoreboardScore5);
         scoreboardScore5.setText(score5);
+    }
 
-        //System.out.println("View leaderboard");
+    // reads leader board data (rank/name/score) from Firebase
+    private void readFirebaseTop5() {
 
-        // Write a message to the database
         database = FirebaseDatabase.getInstance();
         ranksRef = database.getReference("ranks");
-
-
 
         ranksRef.orderByKey().addChildEventListener(new ChildEventListener() {
             @Override
@@ -104,24 +108,23 @@ public class ViewScoreActivity extends AppCompatActivity {
         });
 
 
-
-
+        // reads rank 1 to 5 players' name/score
         for (int i=1; i<=5; i++) {
-            String index = String.valueOf(i);
 
+            String index = String.valueOf(i);
             //System.out.println("ranksRef.child"+index);
             DatabaseReference player = ranksRef.child(index);
             //System.out.println(player);
             DatabaseReference playerName = player.child("name");
-            DatabaseReference playerScore = player.child("score");
             //System.out.println(playerName);
+            DatabaseReference playerScore = player.child("score");
             //System.out.println(playerScore);
 
+            // updates name information if available
             playerName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //System.out.println(snapshot);
-                    //System.out.println(snapshot.getValue());
                     if (snapshot.getValue()!=null) {
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
@@ -144,18 +147,17 @@ public class ViewScoreActivity extends AppCompatActivity {
                             default:
                                 break;
                         }
-
                     }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
+            // updates score information if available
             playerScore.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //System.out.println(snapshot);
-                    //System.out.println(snapshot.getValue());
                     if (snapshot.getValue()!=null) {
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
@@ -185,4 +187,5 @@ public class ViewScoreActivity extends AppCompatActivity {
             });
         }
     }
+
 }

@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 
 public class GameOverActivity extends AppCompatActivity {
 
+    //final int LEADERBOARD_SIZE = 5;
+    
     @BindView(R.id.user_score)
     TextView score;
 

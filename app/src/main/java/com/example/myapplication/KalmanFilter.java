@@ -17,7 +17,6 @@ package com.example.myapplication;
  * limitations under the License.
  */
 
-import android.util.Log;
 
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.NullArgumentException;
@@ -328,8 +327,6 @@ public class KalmanFilter {
         }
 
         dA = u.getEntry(0);
-
-
 
 
         // project the error covariance ahead
