@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class GameOverActivity extends AppCompatActivity {
 
-    // for UI and bottoms
+    // for UI and buttons
     private ImageButton playAgain = null;
     private ImageButton mainMenu = null;
     private ImageButton submit = null;
@@ -106,7 +106,7 @@ public class GameOverActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    // disables back bottom to prevent abnormal game replay
+    // disables back button to prevent abnormal game replay
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -205,7 +205,7 @@ public class GameOverActivity extends AppCompatActivity {
     private void submitScore() {
         rankPointer = 0;
 
-        // collects all score records with handling repeated name and bottom clicks
+        // collects all score records with handling repeated name and button clicks
         HashMap<String,Integer> records = new HashMap<String,Integer>();
         records.put(userName ,Integer.valueOf(userScore));
 

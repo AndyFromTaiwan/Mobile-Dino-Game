@@ -340,7 +340,7 @@ public class PlayGameActivity extends AppCompatActivity {
     }
 
 
-    // jump, duck, and unduck bottoms
+    // jump, duck, and unduck buttons
     private void buttons() {
         /*
         Button jumpButton = (Button) findViewById(R.id.button);
