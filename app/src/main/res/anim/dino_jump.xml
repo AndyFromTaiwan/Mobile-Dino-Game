@@ -3,10 +3,6 @@
     android:shareInterpolator="true"
     android:interpolator="@android:anim/linear_interpolator"
 
-
-
-
-
     android:fillEnabled="true">
 
     <translate android:fromXDelta="0%" android:toXDelta="0%"

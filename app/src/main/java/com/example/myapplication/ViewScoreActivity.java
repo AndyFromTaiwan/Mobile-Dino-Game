@@ -59,7 +59,7 @@ public class ViewScoreActivity extends AppCompatActivity {
     }
 
 
-    // shows score board info
+    // initializes and shows score board info
     private void displayLeaderBoardTop5() {
 
         scoreboardName1 = (TextView) findViewById(R.id.scoreboardName1);
@@ -110,7 +110,6 @@ public class ViewScoreActivity extends AppCompatActivity {
 
         // reads rank 1 to 5 players' name/score
         for (int i=1; i<=5; i++) {
-
             String index = String.valueOf(i);
             //System.out.println("ranksRef.child"+index);
             DatabaseReference player = ranksRef.child(index);
@@ -120,7 +119,7 @@ public class ViewScoreActivity extends AppCompatActivity {
             DatabaseReference playerScore = player.child("score");
             //System.out.println(playerScore);
 
-            // updates name information if available
+            // updates and displays name information if available
             playerName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
@@ -153,7 +152,7 @@ public class ViewScoreActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
-            // updates score information if available
+            // updates and displays score information if available
             playerScore.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {

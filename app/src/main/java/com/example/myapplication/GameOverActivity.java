@@ -4,16 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.Intent;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-// Tony
 import android.view.View;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,38 +24,39 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
+
+
 public class GameOverActivity extends AppCompatActivity {
 
-    //final int LEADERBOARD_SIZE = 5;
-    
-    @BindView(R.id.user_score)
-    TextView score;
-
-    EditText nameInput;
-
+    // for UI and bottoms
     private ImageButton playAgain = null;
     private ImageButton mainMenu = null;
     private ImageButton submit = null;
-
     private TextView highestScoreLabel;
-    //Andy
-    private String highestScore = "NO DATA";
+    private String highestScore = "UNAVAILABLE";
 
+    // for user score display and submission
+    @BindView(R.id.user_score)
+    TextView score;
+    EditText nameInput;
+    String userScore;
+    String userName;
+
+    // for Firebase accessing and updating
+    final int LEADERBOARD_SIZE = 5;
     FirebaseDatabase database;
     DatabaseReference ranksRef;
     String[] names;
     Integer[] scores;
-
-    String userScore;
-    String userName;
-
     int rankPointer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
 
+        // layout initialization
         playAgain = (ImageButton) findViewById(R.id.playAgain);
         mainMenu = (ImageButton) findViewById(R.id.mainMenu);
         submit = (ImageButton) findViewById(R.id.submit);
@@ -65,8 +64,67 @@ public class GameOverActivity extends AppCompatActivity {
         highestScoreLabel = (TextView) findViewById(R.id.highestScoreLabel);
         highestScoreLabel.setText("HIGHTEST SCORE: " + highestScore);
 
-        names = new String[5];
-        scores = new Integer[5];
+        // reads leader board data
+        readFirebase();
+
+        // processes user score
+        userName = "";
+        ButterKnife.bind(this);
+        Intent intent = getIntent();
+        userScore = intent.getStringExtra(PlayGameActivity.MESSAGE);
+        score.setText("YOUR SCORE: " + userScore);
+        nameInput = (EditText) findViewById(R.id.nameInput);
+    }
+
+
+    // submit button onClick: user score submission
+    public void showToast (View view) {
+
+        userName = nameInput.getText().toString();
+
+        // trims excessive long input
+        if (userName.length()>7) {
+            userName = userName.substring(0,7);
+        }
+
+        // displays username for submission
+        Toast.makeText(GameOverActivity.this, userName, Toast.LENGTH_SHORT).show();
+
+        // submits name and score to Firebase
+        if (userName!=null && userName.length()>0) {
+            submitScore();
+        }
+    }
+
+    // playAgain button onClick: starts a new game function
+    public void playAgain(View view) {
+        startActivity(new Intent(getApplicationContext(), PlayGameActivity.class));
+    }
+
+    // mainMeau button onClick: return to main menu function
+    public void returnMenu(View view) {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
+    // disables back bottom to prevent abnormal game replay
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_BACK:
+                    return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+
+    // reads leader board data (rank/name/score) from Firebase
+    private void readFirebase() {
+
+        // leader board data recorders
+        names = new String[LEADERBOARD_SIZE];
+        scores = new Integer[LEADERBOARD_SIZE];
 
         database = FirebaseDatabase.getInstance();
         ranksRef = database.getReference("ranks");
@@ -84,23 +142,22 @@ public class GameOverActivity extends AppCompatActivity {
             public void onChildRemoved(DataSnapshot dataSnapshot) {}
         });
 
-        //Andy
-        for (int i=1; i<=5; i++) {
+        // reads rank 1 to LEADERBOARD_SIZE players' name/score
+        for (int i=1; i<=LEADERBOARD_SIZE; i++) {
             String index = String.valueOf(i);
 
             //System.out.println("ranksRef.child"+index);
             DatabaseReference player = ranksRef.child(index);
             //System.out.println(player);
             DatabaseReference playerName = player.child("name");
-            DatabaseReference playerScore = player.child("score");
             //System.out.println(playerName);
+            DatabaseReference playerScore = player.child("score");
             //System.out.println(playerScore);
 
             playerName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //System.out.println(snapshot);
-                    //System.out.println(snapshot.getValue());
                     if (snapshot.getValue()!=null) {
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
@@ -116,11 +173,12 @@ public class GameOverActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     //System.out.println(snapshot);
-                    //System.out.println(snapshot.getValue());
                     if (snapshot.getValue()!=null) {
                         //System.out.println(index);
                         //System.out.println(snapshot.getKey()+": "+snapshot.getValue());
                         scores[Integer.parseInt(index)-1] = Integer.valueOf(snapshot.getValue().toString());
+
+                        // displays highest score on Firebase
                         switch(index) {
                             case "1":
                                 highestScoreLabel.setText("HIGHTEST SCORE: " + snapshot.getValue().toString());
@@ -134,75 +192,26 @@ public class GameOverActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
         }
-
-        //Andy
-        userName = "";
-
-
-        ButterKnife.bind(this);
-        Intent intent = getIntent();
-        //score.setText("Your Score: " + intent.getStringExtra(PlayGameActivity.MESSAGE));
-        userScore = intent.getStringExtra(PlayGameActivity.MESSAGE);
-        score.setText("YOUR SCORE: " + userScore);
-
-        nameInput = (EditText) findViewById(R.id.nameInput);
     }
 
-    // testing function for storing user input name
-    public void showToast (View view) {
 
-        userName = nameInput.getText().toString();
-        // testing user input name
-        // Andy
-        if (userName.length()>7) {
-            userName = userName.substring(0,7);
-        }
-
-        Toast.makeText(GameOverActivity.this, userName, Toast.LENGTH_SHORT).show();
-
-        if (userName!=null && userName.length()>0) {
-            submitScore();
-        }
-    }
-
-    // 1021 1740
-    // Tony replay function
-    public void playAgain(View view) {
-        startActivity(new Intent(getApplicationContext(), PlayGameActivity.class));
-    }
-
-    // 1021 2320
-    // Tony return menu function
-    public void returnMenu(View view) {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
-    // 1021 1740
-    // Disable Return Button
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (event.getKeyCode()) {
-                case KeyEvent.KEYCODE_BACK:
-                    return true;
-            }
-        }
-        return super.dispatchKeyEvent(event);
-    }
-
+    // assistant method for submitScore lambda expression
     private String getValidRank() {
         rankPointer++;
         return String.valueOf(rankPointer);
     }
 
+    // submits user name and score to Firebase if enters leader board
     private void submitScore() {
-        //TODO
         rankPointer = 0;
+
+        // collects all score records with handling repeated name and bottom clicks
         HashMap<String,Integer> records = new HashMap<String,Integer>();
         records.put(userName ,Integer.valueOf(userScore));
-        for(int i=0; i<5; i++) {
 
+        for(int i=0; i<LEADERBOARD_SIZE; i++) {
             if(names[i]!=null && scores[i]!=null) {
+                // allows only one highest score record for every user
                 if(records.containsKey(names[i])){
                     Integer score = records.get(names[i]);
                     if (scores[i]>score) {
@@ -213,27 +222,26 @@ public class GameOverActivity extends AppCompatActivity {
                 else {
                     records.put(names[i], scores[i]);
                 }
-
             }
         }
-        System.out.println(records);
+        //System.out.println(records);
+
+        // sorts all records by score
         final HashMap<String, Integer> sortedRecords = records.entrySet()
                 .stream()
                 .sorted((HashMap.Entry.<String, Integer>comparingByValue().reversed()))
                 .collect(Collectors.toMap(HashMap.Entry::getKey, HashMap.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         //System.out.println(sortedRecords);
 
-
+        // updates leader board data on Firebase
         sortedRecords.forEach((k,v)->{
             String i = getValidRank();
-            System.out.println("Rank: "+i + ", Name: "+k + ", Score: "+v);
+            //System.out.println("Rank: "+i + ", Name: "+k + ", Score: "+v);
             DatabaseReference player = ranksRef.child(i);
             DatabaseReference playerName = player.child("name");
             DatabaseReference playerScore = player.child("score");
             playerName.setValue(k);
             playerScore.setValue(v.toString());
-
-
         });
     }
 
